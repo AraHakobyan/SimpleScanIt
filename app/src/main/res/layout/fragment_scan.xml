@@ -7,6 +7,57 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.ScanFragment">
 
+    <?xml version="1.0" encoding="utf-8"?>
+
+    <LinearLayout
+        android:id="@+id/barcodeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dimen_20"
+        android:layout_marginTop="@dimen/dimen_20"
+        android:background="@drawable/rounded_corners_background_white"
+        android:divider="@drawable/divider_vertical"
+        android:orientation="horizontal"
+        android:showDividers="middle"
+        android:weightSum="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/barcodeEdT"
+            style="@style/TextViewStyle.Green.Size_17"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_weight="1"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:hint="@string/qr_code"
+            android:background="@null"
+            tools:text="@tools:sample/lorem"
+            android:imeOptions="actionSearch"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/barcodeIcon"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_gravity="center"
+            android:padding="@dimen/padding_normal"
+            android:layout_height="@dimen/_36sdp"
+            android:src="@drawable/ic_baseline_camera_alt_24" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/searchWithTextBtn"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_gravity="center"
+            android:padding="@dimen/padding_normal"
+            android:layout_height="@dimen/_36sdp"
+            android:src="@drawable/ic_baseline_search_24" />
+
+    </LinearLayout>
+
+
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/barcode_edit_text"
         android:layout_width="0dp"

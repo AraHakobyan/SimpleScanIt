@@ -21,8 +21,7 @@ class ScanFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java).apply {
-        }
+        mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -32,8 +31,6 @@ class ScanFragment : Fragment() {
 
         _binding = FragmentScanBinding.inflate(inflater, container, false)
         val root = binding.root
-
-
 
         mainViewModel.allItemsLiveData.observe(viewLifecycleOwner, {
 

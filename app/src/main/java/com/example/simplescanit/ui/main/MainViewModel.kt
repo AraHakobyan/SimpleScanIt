@@ -15,6 +15,9 @@ class MainViewModel : ViewModel() {
 
     val allItemsLiveData = MutableLiveData<MutableList<DbItemModel>>()
     val allItems = mutableListOf<DbItemModel>()
+    val scannedItemsLiveData = MutableLiveData<MutableList<DbItemModel>>()
+    val scannedItems =  mutableListOf<DbItemModel>()
+
 
     fun loadScanInItemsFromFile() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -55,20 +58,23 @@ class MainViewModel : ViewModel() {
         val file = File(letDirectory, "scanout.txt")
         file.appendText("record goes here")
 
+
     }
 
     fun findItemWithBarcode(barcode: String): DbItemModel {
        val existingItem =  allItems.findLast {
             it.barcode == barcode
         }
-        if (existingItem == null){
+        val scannedItem = if (existingItem == null){
             val newItem = DbItemModel(barcode = barcode)
             allItems.add(newItem)
             allItemsLiveData.postValue(allItems)
-            return newItem
+            newItem
         } else {
-            return existingItem
+            existingItem
         }
+        scannedItems.add(scannedItem)
+        scannedItemsLiveData.postValue(scannedItems)
+        return scannedItem
     }
-
 }
