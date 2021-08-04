@@ -1,6 +1,7 @@
 package com.example.simplescanit.ui.main
 
 import android.os.Environment
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,6 +10,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileInputStream
+import java.io.FileWriter
+import java.io.IOException
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.regex.Pattern
 
@@ -51,17 +54,30 @@ class MainViewModel : ViewModel() {
     }
 
     fun writeIntoFile() {
-        val dir: File =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-        val file = File(dir, "scanout.txt")
-        file.mkdir()
         var scanedItemsString = ""
         scannedItems.forEach {
             scanedItemsString += "P;${it.barcode};${it.quantity}\n"
         }
-        file.appendText(scanedItemsString)
+        insertTextIntoGivenFile("scanout.txt", scanedItemsString)
         scannedItems.clear()
         scannedItemsLiveData.postValue(scannedItems)
+    }
+
+    private fun insertTextIntoGivenFile(sFileName: String?, sBody: String?) {
+        try {
+            val root =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            if (!root.exists()) {
+                root.mkdirs()
+            }
+            val gpxfile = File(root, sFileName)
+            val writer = FileWriter(gpxfile)
+            writer.append(sBody)
+            writer.flush()
+            writer.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
     }
 
     fun findItemWithBarcode(barcode: String): DbItemModel {
@@ -103,5 +119,6 @@ class MainViewModel : ViewModel() {
         quantityAtomic.set(qty ?: 0)
     }
 
-    fun isBarcodeAlreadyScanned(barcode: String): Boolean = scannedItems.find { it.barcode == barcode } != null
+    fun isBarcodeAlreadyScanned(barcode: String): Boolean =
+        scannedItems.find { it.barcode == barcode } != null
 }

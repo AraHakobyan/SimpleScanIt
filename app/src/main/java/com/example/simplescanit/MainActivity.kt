@@ -21,14 +21,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-
         mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        mainViewModel.loadScanInItemsFromFile()
-
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
         checkPermissions()
+
     }
 
     private val requiredPermissions: Array<String?>
@@ -73,6 +69,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkPermissions() {
         if (allPermissionsGranted()) {
+            mainViewModel.loadScanInItemsFromFile()
+            setContentView(binding.root)
             val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
             val viewPager: ViewPager = binding.viewPager
             viewPager.adapter = sectionsPagerAdapter
