@@ -73,4 +73,7 @@
     <string name="error_grancel">Սխալ</string>
     <string name="success_grancel">Դուք հաջողությամբ գրանցել եք</string>
     <string name="incorrect_user">Սխալ մուտքաբառը կամ գաղտնաբառը</string>
+    <string name="to_register">Գրանցել</string>
+    <string name="hint_item_name">Անուն</string>
+    <string name="hint_item_price">Գինը</string>
 </resources>

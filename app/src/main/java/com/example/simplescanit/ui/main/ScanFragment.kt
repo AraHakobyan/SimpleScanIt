@@ -46,6 +46,7 @@ class ScanFragment : Fragment() {
             with(mainViewModel){
                 searchWithTextBtn.setOnClickListener{
                     val barcode = barcodeEdT.text.toString()
+                    if(barcode.isEmpty()) return@setOnClickListener
                     val item = findItemWithBarcode(barcode)
                     barcodeEdT.setText("")
                     if (isBarcodeAlreadyScanned(barcode)){

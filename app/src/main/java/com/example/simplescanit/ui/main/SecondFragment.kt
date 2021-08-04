@@ -62,7 +62,7 @@ class SecondFragment : Fragment() {
             }
         }
         headerAdapter.submitList(listOf(HeaderItemModel(
-            itemName = "Name",
+            itemName = getString(R.string.hint_item_name),
             quantityName = getString(R.string.quantity_text)
         )))
 

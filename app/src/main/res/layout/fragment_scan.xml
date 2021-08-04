@@ -50,6 +50,7 @@
     <androidx.constraintlayout.widget.Group
         android:id="@+id/info_group"
         android:visibility="invisible"
+        tools:visibility="visible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:constraint_referenced_ids="counter_layout,product_name_container,product_price_container" />
@@ -90,7 +91,7 @@
             android:layout_marginBottom="@dimen/margin_small"
             android:layout_weight="1"
             android:gravity="start"
-            android:text="Name"
+            android:text="@string/hint_item_name"
             android:textStyle="bold" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -130,7 +131,7 @@
             android:layout_marginBottom="@dimen/margin_small"
             android:layout_weight="1"
             android:gravity="start"
-            android:text="Price"
+            android:text="@string/hint_item_price"
             android:textStyle="bold" />
 
         <androidx.appcompat.widget.AppCompatTextView
