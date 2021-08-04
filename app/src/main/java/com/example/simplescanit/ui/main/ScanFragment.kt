@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.simplescanit.databinding.FragmentScanBinding
@@ -41,18 +43,76 @@ class ScanFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
-            searchBtn.setOnClickListener{
-                val item = mainViewModel.findItemWithBarcode(barcodeEditText.text.toString())
-                showInfo(item)
+            with(mainViewModel){
+                searchWithTextBtn.setOnClickListener{
+                    val barcode = barcodeEdT.text.toString()
+                    val item = findItemWithBarcode(barcode)
+                    barcodeEdT.setText("")
+                    if (isBarcodeAlreadyScanned(barcode)){
+                        setQuantity(scannedItems.find { it.barcode == barcode }?.quantity ?: 0)
+                    } else {
+                        scannedItems.add(item)
+                        scannedItemsLiveData.postValue(scannedItems)
+                        setQuantity(0)
+                    }
+                    counterLayout.scanQtyTv.text = quantityAtomic.get().toString()
+                    showInfo(item)
+                }
+                barcodeEdT.addTextChangedListener(
+                    beforeTextChanged = { text: CharSequence?, start: Int, count: Int, after: Int ->
+                        val t = text?.toString() ?: ""
+                        beforeBarcodeChangedText = t
+                    }
+                )
+                barcodeEdT.addTextChangedListener {
+                    if (it?.contains("\n") == true) {
+                        val barcode = it.toString().replace("\n", "")
+                        val isBarcodeTheSame = doesContainsTwoBarcode(
+                            newText = barcode,
+                            oldText = beforeBarcodeChangedText
+                        )
+                        if (isBarcodeTheSame.first) {
+                            barcodeEdT.setText(isBarcodeTheSame.second)
+                            barcodeEdT.setSelection(isBarcodeTheSame.second.length)
+                            barcodeEdT.requestFocus()
+                            counterLayout.qtyPlusBtn.callOnClick()
+                        } else {
+                            barcodeEdT.setText(barcode)
+                            barcodeEdT.setSelection(barcode.length)
+                            barcodeEdT.requestFocus()
+                            searchWithTextBtn.callOnClick()
+                        }
+                    }
+                }
+                counterLayout.apply {
+                    qtyMinusBtn.setOnClickListener {
+                        scanQtyTv.text =
+                            subtractQuantity()
+                                .toString()
+
+                    }
+                    qtyPlusBtn.setOnClickListener {
+                        scanQtyTv.text =
+                            addQuantity().toString()
+                    }
+                }
             }
         }
+    }
+
+
+    private fun doesContainsTwoBarcode(newText: String, oldText: String): Pair<Boolean, String> {
+        val addedText = newText.replaceFirst(oldText, "")
+        return Pair(addedText.trim() == oldText.trim(), oldText)
     }
 
     private fun showInfo(data: DbItemModel){
         binding.apply {
             with(data){
-                itemNameTv.text = name ?: "dfsf"
-                itemPriceTv.text = price ?: "dsfasf"
+                infoGroup.isVisible = true
+                productNameValue.text = name
+                productPriceValue.text = price
+                counterLayout.mnacord.text = remCount
             }
         }
     }

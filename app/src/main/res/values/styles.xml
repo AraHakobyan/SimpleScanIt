@@ -1,0 +1,220 @@
+<resources>
+    <!-- Base application theme. -->
+
+    <style name="InputTextStyle" parent="Widget.Design.TextInputLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="InputTextStyle.Simple">
+        <item name="android:layout_marginStart">@dimen/margin_normal</item>
+        <item name="android:layout_marginEnd">@dimen/margin_normal</item>
+    </style>
+
+    <style name="TextViewStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="TextViewStyle.Black">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextViewStyle.Green">
+        <item name="android:textColor">@color/green</item>
+    </style>
+
+    <style name="TextViewStyle.White">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="TextViewStyle.Black.Size_17">
+        <item name="android:textSize">@dimen/text_size_17</item>
+    </style>
+
+    <style name="TextViewStyle.Black.Size_13">
+        <item name="android:textSize">@dimen/text_size_13</item>
+    </style>
+
+    <style name="TextViewStyle.Green.Size_17">
+        <item name="android:textSize">@dimen/text_size_17</item>
+    </style>
+
+    <style name="TextViewStyle.Green.Size_13">
+        <item name="android:textSize">@dimen/text_size_13</item>
+    </style>
+
+    <style name="TextViewStyle.White.Size_13">
+        <item name="android:textSize">@dimen/text_size_13</item>
+    </style>
+
+
+    <style name="TextViewStyle.White.Size_17">
+        <item name="android:textSize">@dimen/text_size_17</item>
+    </style>
+
+
+    <style name="TextViewStyle.White.Size_22">
+        <item name="android:textSize">@dimen/text_size_22</item>
+    </style>
+
+    <style name="TextViewStyle.Black.Size_17.Bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextViewStyle.White.Size_13.Bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextViewStyle.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginStart">@dimen/margin_normal</item>
+        <item name="android:layout_marginEnd">@dimen/margin_normal</item>
+        <item name="android:textSize">@dimen/text_size_special</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:background">@drawable/rounded_corners_background</item>
+        <item name="android:padding">@dimen/padding_normal</item>
+        <item name="android:minHeight">@dimen/min_button_height</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="TextViewStyle.Title">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginStart">@dimen/margin_normal</item>
+        <item name="android:layout_marginEnd">@dimen/margin_normal</item>
+        <item name="android:textSize">@dimen/text_size_special</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:padding">@dimen/padding_normal</item>
+    </style>
+
+    <style name="TextViewStyle.Count">
+        <item name="android:textSize">@dimen/text_size_normal</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+
+    <style name="TextViewStyle.CompletedTitle">
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:paddingTop">@dimen/padding_normal</item>
+        <item name="android:paddingBottom">@dimen/padding_normal</item>
+        <item name="android:clickable">false</item>
+    </style>
+
+    <style name="TextViewStyle.CompletedValue">
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:gravity">start</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textSize">@dimen/text_size_normal</item>
+        <item name="android:paddingTop">@dimen/padding_big</item>
+        <item name="android:paddingBottom">@dimen/padding_big</item>
+    </style>
+
+    <style name="ContainerStyle" />
+
+    <style name="ContainerStyle.ValuesItem">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:divider">@drawable/divider</item>
+        <item name="showDividers">middle|end|beginning</item>
+    </style>
+
+    <style name="EditTextContainerStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColorHint">@color/hintPrimary</item>
+        <item name="hintEnabled">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:focusable">false</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingBottom">@dimen/padding_normal</item>
+        <item name="android:paddingTop">@dimen/padding_normal</item>
+        <item name="android:paddingEnd">@dimen/padding_normal</item>
+        <item name="android:textSize">@dimen/text_size_normal</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="hintTextColor">@color/black</item>
+    </style>
+
+
+    <style name="TextStyle_Title">
+        <item name="android:textSize">@dimen/text_size_special</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:padding">@dimen/padding_normal</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextStyle_Title.Toolbar">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="CircularButtonStyle">
+        <item name="layout_constraintHorizontal_bias">0.5</item>
+    </style>
+
+    <style name="CircularButtonStyle.Blue">
+        <item name="android:textSize">@dimen/text_size_special</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:paddingTop">@dimen/padding_normal</item>
+        <item name="android:paddingBottom">@dimen/padding_normal</item>
+        <item name="android:paddingStart">@dimen/padding_big</item>
+        <item name="android:paddingEnd">@dimen/padding_big</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/btn_positive</item>
+    </style>
+
+    <style name="CircularButtonStyle.Yellow">
+        <item name="android:textSize">@dimen/text_size_special</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:paddingTop">@dimen/padding_normal</item>
+        <item name="android:paddingBottom">@dimen/padding_normal</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/btn_yellow</item>
+    </style>
+
+    <style name="CircularButtonStyle.Green">
+        <item name="android:textSize">@dimen/text_size_17</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/btn_green</item>
+    </style>
+
+    <style name="CircularButtonStyle.White">
+        <item name="android:textSize">@dimen/text_size_17</item>
+        <item name="android:textColor">@color/green</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/rounded_corners_background</item>
+    </style>
+
+    <style name="CircularButtonStyle.Blue.Simple">
+        <item name="android:textSize">@dimen/text_size_normal</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Hivandanoc.Theme.BottomSheetStyle" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Hivandanoc.Theme.BottomSheet</item>
+    </style>
+
+    <style name="Hivandanoc.Theme.BottomSheet" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+</resources>

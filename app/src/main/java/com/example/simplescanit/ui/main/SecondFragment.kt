@@ -7,19 +7,39 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.simplescanit.R
 import com.example.simplescanit.databinding.FragmentSecondBinding
+import com.example.simplescanit.ui.main.adapter.HeaderAdapter
+import com.example.simplescanit.ui.main.adapter.ScannedItemsAdapter
+import com.example.simplescanit.ui.main.model.HeaderItemModel
 
-class SecondFragment : Fragment(){
+class SecondFragment : Fragment() {
 
     private lateinit var mainViewModel: MainViewModel
     private var _binding: FragmentSecondBinding? = null
+    private val scannedItemsAdapter: ScannedItemsAdapter by lazy {
+        ScannedItemsAdapter()
+    }
+
+    private val headerAdapter: HeaderAdapter by lazy {
+        HeaderAdapter()
+    }
+
+    private val concatAdapter: ConcatAdapter by lazy {
+        ConcatAdapter().apply {
+            addAdapter(0, headerAdapter)
+            addAdapter(1, scannedItemsAdapter)
+        }
+    }
 
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java).apply {
-        }
+        mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -31,6 +51,34 @@ class SecondFragment : Fragment(){
         val root = binding.root
 
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.apply {
+            initScannedItemsRv(scannedItemsRv)
+            registerBtn.setOnClickListener {
+                mainViewModel.writeIntoFile()
+            }
+        }
+        headerAdapter.submitList(listOf(HeaderItemModel(
+            itemName = "Name",
+            quantityName = getString(R.string.quantity_text)
+        )))
+
+        mainViewModel.scannedItemsLiveData.observe(viewLifecycleOwner) {
+            scannedItemsAdapter.submitList(null)
+            scannedItemsAdapter.submitList(it)
+            scannedItemsAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun initScannedItemsRv(rv: RecyclerView) {
+        rv.apply {
+            layoutManager = LinearLayoutManager(context)
+            setHasFixedSize(false)
+            adapter = concatAdapter
+        }
     }
 
     companion object {

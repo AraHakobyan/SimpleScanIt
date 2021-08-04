@@ -8,5 +8,6 @@ data class DbItemModel(
     val barcode: String,
     val name: String? = null,
     val price: String? = null,
-    val remCount: String? = null
+    val remCount: String? = null,
+    var quantity: Int? = null
 )
