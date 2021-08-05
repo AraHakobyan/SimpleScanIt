@@ -37,6 +37,10 @@ class ScanFragment : Fragment() {
         mainViewModel.allItemsLiveData.observe(viewLifecycleOwner, {
 
         })
+
+        mainViewModel.registeredLiveData.observe(viewLifecycleOwner){
+            binding.infoGroup.isVisible = !it
+        }
         return root
     }
 
@@ -50,11 +54,17 @@ class ScanFragment : Fragment() {
                     val item = findItemWithBarcode(barcode)
                     barcodeEdT.setText("")
                     if (isBarcodeAlreadyScanned(barcode)){
-                        setQuantity(scannedItems.find { it.barcode == barcode }?.quantity ?: 0)
+                        val quantity = scannedItems.find { it.barcode == barcode }?.quantity
+                        if (quantity != null){
+                            setQuantity(quantity + 1)
+                        } else {
+                            setQuantity(1)
+                        }
+
                     } else {
                         scannedItems.add(item)
                         scannedItemsLiveData.postValue(scannedItems)
-                        setQuantity(0)
+                        setQuantity(1)
                     }
                     counterLayout.scanQtyTv.text = quantityAtomic.get().toString()
                     showInfo(item)
@@ -110,7 +120,7 @@ class ScanFragment : Fragment() {
     private fun showInfo(data: DbItemModel){
         binding.apply {
             with(data){
-                infoGroup.isVisible = true
+                mainViewModel.registeredLiveData.value = false
                 productNameValue.text = name
                 productPriceValue.text = price
                 counterLayout.mnacord.text = remCount

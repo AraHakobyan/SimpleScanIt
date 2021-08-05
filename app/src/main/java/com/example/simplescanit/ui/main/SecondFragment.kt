@@ -1,11 +1,12 @@
 package com.example.simplescanit.ui.main
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,11 +16,18 @@ import com.example.simplescanit.databinding.FragmentSecondBinding
 import com.example.simplescanit.ui.main.adapter.HeaderAdapter
 import com.example.simplescanit.ui.main.adapter.ScannedItemsAdapter
 import com.example.simplescanit.ui.main.model.HeaderItemModel
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class SecondFragment : Fragment() {
 
     private lateinit var mainViewModel: MainViewModel
     private var _binding: FragmentSecondBinding? = null
+    private val sharedPreferences: SharedPreferences by lazy {
+        requireActivity().getPreferences(Context.MODE_PRIVATE)
+    }
     private val scannedItemsAdapter: ScannedItemsAdapter by lazy {
         ScannedItemsAdapter()
     }
@@ -58,7 +66,7 @@ class SecondFragment : Fragment() {
         binding.apply {
             initScannedItemsRv(scannedItemsRv)
             registerBtn.setOnClickListener {
-                mainViewModel.writeIntoFile()
+                mainViewModel.writeIntoFile(sharedPreferences)
             }
         }
         headerAdapter.submitList(listOf(HeaderItemModel(
@@ -67,6 +75,11 @@ class SecondFragment : Fragment() {
         )))
 
         mainViewModel.scannedItemsLiveData.observe(viewLifecycleOwner) {
+            val itemsJson = Gson().toJson(it)
+            with(sharedPreferences.edit()){
+                putString(EXTRA_SCANNED_ITEMS, itemsJson)
+                apply()
+            }
             scannedItemsAdapter.submitList(null)
             scannedItemsAdapter.submitList(it)
             scannedItemsAdapter.notifyDataSetChanged()

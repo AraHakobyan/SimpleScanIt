@@ -1,11 +1,13 @@
 package com.example.simplescanit.ui.main
 
+import android.content.SharedPreferences
 import android.os.Environment
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.simplescanit.ui.main.model.DbItemModel
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -15,9 +17,7 @@ import java.io.IOException
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.regex.Pattern
 
-
 class MainViewModel : ViewModel() {
-
     val allItemsLiveData = MutableLiveData<MutableList<DbItemModel>>()
     val allItems = mutableListOf<DbItemModel>()
     val scannedItemsLiveData = MutableLiveData<MutableList<DbItemModel>>()
@@ -25,16 +25,17 @@ class MainViewModel : ViewModel() {
     val quantityAtomic = AtomicInteger(0)
     var beforeBarcodeChangedText: String = ""
     var currentBarcode: String = ""
+    val registeredLiveData = MutableLiveData<Boolean>().apply { value = true }
 
-    fun loadScanInItemsFromFile() {
+    fun loadScanInItemsFromFile(sharedPreferences: SharedPreferences) {
         viewModelScope.launch(Dispatchers.IO) {
             val dir: File =
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-            val letDirectory = File(dir, "scanin.txt")
+            val letDirectory = File(dir, "scanin.dat")
             val inputAsString = FileInputStream(letDirectory).bufferedReader().use { it.readText() }
             val items: List<String> = (inputAsString).split(
                 Pattern.compile(
-                    ";;;\n"
+                    ";;;\r\n"
                 )
             )
             items.forEach {
@@ -51,16 +52,36 @@ class MainViewModel : ViewModel() {
             }
             allItemsLiveData.postValue(allItems)
         }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val scannedItemsCash = sharedPreferences.getString(EXTRA_SCANNED_ITEMS, null)
+            val gson = Gson()
+            val arrayTutorialType = object : TypeToken<Array<DbItemModel>>() {}.type
+
+            if (scannedItemsCash != null){
+                val cashItems: Array<DbItemModel> = gson.fromJson(scannedItemsCash, arrayTutorialType)
+                scannedItems.clear()
+                scannedItems.addAll(cashItems)
+                scannedItemsLiveData.postValue(scannedItems)
+            }
+        }
     }
 
-    fun writeIntoFile() {
+    fun writeIntoFile(sharedPreferences: SharedPreferences) {
         var scanedItemsString = ""
         scannedItems.forEach {
-            scanedItemsString += "P;${it.barcode};${it.quantity}\n"
+            scanedItemsString += "P;${it.barcode};${it.quantity}\r\n"
         }
-        insertTextIntoGivenFile("scanout.txt", scanedItemsString)
+        insertTextIntoGivenFile("scanout.dat", scanedItemsString)
+        with(sharedPreferences.edit()) {
+            putString(EXTRA_SCANNED_ITEMS, "")
+            apply()
+        }
+        registeredLiveData.value = true
         scannedItems.clear()
         scannedItemsLiveData.postValue(scannedItems)
+        setQuantity(0)
+        currentBarcode = ""
     }
 
     private fun insertTextIntoGivenFile(sFileName: String?, sBody: String?) {
@@ -117,8 +138,12 @@ class MainViewModel : ViewModel() {
 
     fun setQuantity(qty: Int?) {
         quantityAtomic.set(qty ?: 0)
+        scannedItems.find { it.barcode == currentBarcode }?.quantity = quantityAtomic.get()
+        scannedItemsLiveData.postValue(scannedItems)
     }
 
     fun isBarcodeAlreadyScanned(barcode: String): Boolean =
         scannedItems.find { it.barcode == barcode } != null
 }
+
+const val EXTRA_SCANNED_ITEMS = "EXTRA_SCANNED_ITEMS"

@@ -1,6 +1,7 @@
 package com.example.simplescanit
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import com.google.android.material.tabs.TabLayout
@@ -15,6 +16,9 @@ import com.example.simplescanit.ui.main.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 
+    private val sharedPreferences: SharedPreferences by lazy {
+        getPreferences(Context.MODE_PRIVATE)
+    }
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
 
@@ -69,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkPermissions() {
         if (allPermissionsGranted()) {
-            mainViewModel.loadScanInItemsFromFile()
+            mainViewModel.loadScanInItemsFromFile(sharedPreferences)
             setContentView(binding.root)
             val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
             val viewPager: ViewPager = binding.viewPager
