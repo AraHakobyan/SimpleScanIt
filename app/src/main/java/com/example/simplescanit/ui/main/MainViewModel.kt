@@ -73,8 +73,7 @@ class MainViewModel : ViewModel() {
         scannedItems.forEach {
             scanedItemsString += "P;${it.barcode};${it.quantity}\r\n"
         }
-        insertTextIntoGivenFile("scanout_${Calendar.getInstance().timeInMillis}.txt", scanedItemsString)
-        insertTextIntoGivenFile("scanout.dat", scanedItemsString)
+        insertTextIntoGivenFile("scanout_${Calendar.getInstance().timeInMillis}.dat", scanedItemsString)
         with(sharedPreferences.edit()) {
             putString(EXTRA_SCANNED_ITEMS, "")
             apply()
