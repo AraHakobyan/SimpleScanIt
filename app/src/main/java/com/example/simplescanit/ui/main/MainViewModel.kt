@@ -12,6 +12,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileWriter
 import java.io.IOException
+import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.regex.Pattern
 
@@ -58,7 +59,7 @@ class MainViewModel : ViewModel() {
         scannedItems.forEach {
             scanedItemsString += "P;${it.barcode};${it.quantity}\n"
         }
-        insertTextIntoGivenFile("scanout.txt", scanedItemsString)
+        insertTextIntoGivenFile("scanout_${Calendar.getInstance().timeInMillis}.txt", scanedItemsString)
         scannedItems.clear()
         scannedItemsLiveData.postValue(scannedItems)
     }

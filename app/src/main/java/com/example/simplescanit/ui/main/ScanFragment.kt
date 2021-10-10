@@ -45,7 +45,7 @@ class ScanFragment : Fragment() {
         binding.apply {
             with(mainViewModel){
                 searchWithTextBtn.setOnClickListener{
-                    val barcode = barcodeEdT.text.toString()
+                    val barcode = barcodeEdT.text.toString().replace(" ", "")
                     if(barcode.isEmpty()) return@setOnClickListener
                     val item = findItemWithBarcode(barcode)
                     barcodeEdT.setText("")
@@ -62,12 +62,12 @@ class ScanFragment : Fragment() {
                 barcodeEdT.addTextChangedListener(
                     beforeTextChanged = { text: CharSequence?, start: Int, count: Int, after: Int ->
                         val t = text?.toString() ?: ""
-                        beforeBarcodeChangedText = t
+                        beforeBarcodeChangedText = t.replace(" ", "")
                     }
                 )
                 barcodeEdT.addTextChangedListener {
                     if (it?.contains("\n") == true) {
-                        val barcode = it.toString().replace("\n", "")
+                        val barcode = it.toString().replace("\n", "").replace(" ", "")
                         val isBarcodeTheSame = doesContainsTwoBarcode(
                             newText = barcode,
                             oldText = beforeBarcodeChangedText
