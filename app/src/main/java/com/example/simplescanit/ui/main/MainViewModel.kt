@@ -12,8 +12,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileInputStream
-import java.io.FileWriter
-import java.io.IOException
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.regex.Pattern
@@ -33,7 +31,11 @@ class MainViewModel : ViewModel() {
             val dir: File =
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
             val letDirectory = File(dir, "scanin.dat")
-            val inputAsString = FileInputStream(letDirectory).bufferedReader().use { it.readText() }
+            val fileInputStream = FileInputStream(letDirectory)
+            val bufferReader = fileInputStream.bufferedReader()
+            val inputAsString = bufferReader.use {
+                it.readText()
+            }
             val items: List<String> = (inputAsString).split(
                 Pattern.compile(
                     ";;;\r\n"
@@ -52,6 +54,11 @@ class MainViewModel : ViewModel() {
                 )
             }
             allItemsLiveData.postValue(allItems)
+            try {
+                bufferReader.close()
+                fileInputStream.close()
+            } catch (ex: Exception) {
+            }
         }
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -59,8 +66,9 @@ class MainViewModel : ViewModel() {
             val gson = Gson()
             val arrayTutorialType = object : TypeToken<Array<DbItemModel>>() {}.type
 
-            if (scannedItemsCash != null){
-                val cashItems: Array<DbItemModel> = gson.fromJson(scannedItemsCash, arrayTutorialType)
+            if (scannedItemsCash != null) {
+                val cashItems: Array<DbItemModel> =
+                    gson.fromJson(scannedItemsCash, arrayTutorialType)
                 scannedItems.clear()
                 scannedItems.addAll(cashItems)
                 scannedItemsLiveData.postValue(scannedItems)
@@ -69,11 +77,16 @@ class MainViewModel : ViewModel() {
     }
 
     fun writeIntoFile(sharedPreferences: SharedPreferences) {
+        if (scannedItems.isNullOrEmpty()) return
+
         var scanedItemsString = ""
         scannedItems.forEach {
             scanedItemsString += "P;${it.barcode};${it.quantity}\r\n"
         }
-        insertTextIntoGivenFile("scanout_${Calendar.getInstance().timeInMillis}.dat", scanedItemsString)
+        insertTextIntoGivenFile(
+            "scanout_${Calendar.getInstance().timeInMillis}.dat",
+            scanedItemsString
+        )
         with(sharedPreferences.edit()) {
             putString(EXTRA_SCANNED_ITEMS, "")
             apply()
@@ -86,20 +99,12 @@ class MainViewModel : ViewModel() {
     }
 
     private fun insertTextIntoGivenFile(sFileName: String?, sBody: String?) {
-        try {
-            val root =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-            if (!root.exists()) {
-                root.mkdirs()
-            }
-            val gpxfile = File(root, sFileName)
-            val writer = FileWriter(gpxfile)
-            writer.append(sBody)
-            writer.flush()
-            writer.close()
-        } catch (e: IOException) {
-            e.printStackTrace()
+        val root =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        if (!root.exists()) {
+            root.mkdirs()
         }
+        File(root, sFileName).printWriter().use { out -> out.println(sBody) }
     }
 
     fun findItemWithBarcode(barcode: String): DbItemModel {
