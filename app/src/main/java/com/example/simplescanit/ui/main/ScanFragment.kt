@@ -40,6 +40,8 @@ class ScanFragment : Fragment() {
 
         mainViewModel.registeredLiveData.observe(viewLifecycleOwner){
             binding.infoGroup.isVisible = !it
+            context?.cacheDir?.deleteRecursively()
+            context?.dataDir?.deleteRecursively()
         }
         return root
     }

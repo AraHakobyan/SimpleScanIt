@@ -91,11 +91,11 @@ class MainViewModel : ViewModel() {
             putString(EXTRA_SCANNED_ITEMS, "")
             apply()
         }
-        registeredLiveData.value = true
         scannedItems.clear()
         scannedItemsLiveData.postValue(scannedItems)
         setQuantity(0)
         currentBarcode = ""
+        registeredLiveData.value = true
     }
 
     private fun insertTextIntoGivenFile(sFileName: String?, sBody: String?) {
