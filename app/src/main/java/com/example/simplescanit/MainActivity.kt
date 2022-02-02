@@ -31,21 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private val requiredPermissions: Array<String?>
-        get() {
-            return try {
-                val info = packageManager
-                    ?.getPackageInfo(packageName!!, PackageManager.GET_PERMISSIONS)
-                val ps = info?.requestedPermissions
-                if (ps != null && ps.isNotEmpty()) {
-                    ps
-                } else {
-                    arrayOfNulls(0)
-                }
-            } catch (e: Exception) {
-                arrayOfNulls(0)
-            }
-        }
+    private val requiredPermissions: Array<String> = arrayOf("android.permission.WRITE_EXTERNAL_STORAGE")
 
     private fun allPermissionsGranted(): Boolean {
         for (permission in requiredPermissions) {
